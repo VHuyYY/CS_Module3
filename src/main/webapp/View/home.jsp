@@ -14,6 +14,7 @@
           integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+
     <link rel="stylesheet" href="Css/home.css">
     <title>Title</title>
 </head>
@@ -50,7 +51,7 @@
                 </a>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="http://localhost:8080/View/login.jsp">
                             <i class="fas fa-user">
                             </i>
                             Tài Khoản Của Tôi
@@ -114,21 +115,24 @@
     </div>
 </section>
 <br>
-<section class="title">
+<div class="title">
     <p>Danh Mục Sản Phẩm</p>
-</section>
+    <a href="http://localhost:8080/home?path=create">
+        <button>Thêm Sản Phẩm Mới</button>
+    </a>
+</div>
 <div class="main">
     <div class="main-left">
         <div class="row">
             <div class="col-4">
-                <%--                <e:forEach var="item" items="${categories}">--%>
-                <%--                    <div class="list-group" id="list-tab" role="tablist">--%>
-                <%--                        <a class="list-group-item list-group-item-action "--%>
-                <%--                           id="list-home-list"--%>
-                <%--                           href="${pageContext.request.contextPath}/home?path=category&cid=${item.id}"--%>
-                <%--                           role="tab" aria-controls="list-home">${item.name}</a>--%>
-                <%--                    </div>--%>
-                <%--                </e:forEach>--%>
+                <e:forEach var="item" items="${categories}">
+                    <div class="list-group" id="list-tab" role="tablist">
+                        <a class="list-group-item list-group-item-action ${tag == item.id ? "active":""}"
+                           id=" list-home-list"
+                           href="${pageContext.request.contextPath}/home?path=category&id=${item.id}"
+                           role="tab" aria-controls="list-home">${item.name}</a>
+                    </div>
+                </e:forEach>
             </div>
         </div>
     </div>
@@ -141,7 +145,7 @@
                         <h5 class="card-title">${product.name}</h5>
                         <h6 class="card-title"> $ ${product.price}</h6>
                         <p class="card-text">${product.description}</p>
-                        <a href="#" class="btn btn-primary">Edit</a>
+                        <a href="http://localhost:8080/home?path=edit&id=${product.id}" class="btn btn-primary">Edit</a>
                         <label for="delete-${loop.index}" class="btn btn-primary red">Xóa</label>
                         <input type="checkbox" id="delete-${loop.index}" class="confirm-checkbox"/>
                         <div class="confirm-modal">

@@ -6,15 +6,32 @@ public class Product {
     private String img;
     private double price;
     private String description;
-    private Category category;
+    private int categoryId;
+    private int accountId;
 
-    public Product(int id, String name, String img, double price, String description, Category category) {
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
+
+    public Product(String name, String img, double price, String description, int categoryId) {
+        this.name = name;
+        this.img = img;
+        this.price = price;
+        this.description = description;
+        this.categoryId = categoryId;
+    }
+
+    public Product(int id, String name, String img, double price, String description, int categoryId) {
         this.id = id;
         this.name = name;
         this.img = img;
         this.price = price;
         this.description = description;
-        this.category = category;
+        this.categoryId = categoryId;
     }
 
     public int getId() {
@@ -57,11 +74,11 @@ public class Product {
         this.description = description;
     }
 
-    public Category getCategory() {
-        return category;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 }
