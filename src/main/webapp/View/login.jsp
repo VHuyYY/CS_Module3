@@ -19,12 +19,13 @@
 <div class="login-container">
     <h1>LOGIN</h1>
     <p>Please enter your login and password!</p>
-    <form>
+    <form action="${pageContext.request.contextPath}/login" method="post">
+        <p class="text-danger">${mess}</p>
         <div class="mb-3">
-            <input type="email" class="form-control" placeholder=User>
+            <input type="text" name="user" class="form-control" placeholder=User>
         </div>
         <div class="mb-3">
-            <input type="password" class="form-control" placeholder="Password">
+            <input type="password" name="password" class="form-control" placeholder="Password">
         </div>
         <div class="forgot-password mb-3">
             <a href="#">Forgot password?</a>

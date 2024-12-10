@@ -1,3 +1,4 @@
+<%@ taglib prefix="e" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: bipro
@@ -63,12 +64,10 @@
                 <p>Category</p>
                 <select class="form-select" name="categoryMethod" id="categoryMethod"
                         aria-label="Default select example" onchange="handleSelectChange()">
-                    <option value="1">Nhẫn</option>
-                    <option value="2">Dây Chuyền</option>
-                    <option value="3">Khác</option>
-                </select>
-
-                <input type="text" id="otherInput" style="display:none;" placeholder="Nhập vào">
+                    <e:forEach items="${categories}" var="category">
+                    <option value="${category.id}">${category.name}</option>
+                    </e:forEach>
+                    <input type="text" id="otherInput" style="display:none;" placeholder="Nhập vào">
             </li>
             <li>
                 <div class="submit">

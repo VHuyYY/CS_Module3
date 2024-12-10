@@ -28,8 +28,7 @@ public class ProductService implements IProductService<Product> {
             preparedStatement.setString(3, product.getImg());
             preparedStatement.setDouble(4, product.getPrice());
             preparedStatement.setString(5, product.getDescription());
-            preparedStatement.setInt(6, product.getCategoryId());
-//            preparedStatement.setInt(get product.getAccountId());
+            preparedStatement.setInt(6, product.getCategoryId().getId());
             preparedStatement.executeUpdate();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -57,7 +56,7 @@ public class ProductService implements IProductService<Product> {
             preparedStatement.setString(2, product.getImg());
             preparedStatement.setDouble(3, product.getPrice());
             preparedStatement.setString(4, product.getDescription());
-            preparedStatement.setInt(5, product.getCategoryId());
+            preparedStatement.setInt(5, product.getCategoryId().getId());
             preparedStatement.setInt(6, id);
             int rowEffect = preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -79,9 +78,10 @@ public class ProductService implements IProductService<Product> {
                 double price = resultSet.getDouble("price");
                 String description = resultSet.getString("description");
                 int category_id = resultSet.getInt("category_id");
-//                String nameCategory = resultSet.getString("nameCategory");
-//                Category category = new Category(category_id, nameCategory);
-                Product p = new Product(ids, name, img, price, description, category_id);
+                String nameCategory = resultSet.getString("name");
+                Category category = new Category(category_id, nameCategory);
+
+                Product p = new Product(ids, name, img, price, description, category);
                 products.add(p);
             }
         } catch (SQLException e) {
@@ -121,7 +121,9 @@ public class ProductService implements IProductService<Product> {
                 double price = resultSet.getDouble("price");
                 String description = resultSet.getString("description");
                 int category_id = resultSet.getInt("category_id");
-                Product p = new Product(id, name, img, price, description, category_id);
+                String nameCategory = resultSet.getString("nameCategory");
+                Category category = new Category(category_id, nameCategory);
+                Product p = new Product(id, name, img, price, description, category);
                 list.add(p);
             }
         } catch (SQLException e) {
@@ -132,7 +134,10 @@ public class ProductService implements IProductService<Product> {
 
     @Override
     public Product findById(int id) {
-        String sql = "select * from product where id = ?;";
+        String sql = "SELECT p.id, p.name, p.img, p.price, p.description, p.category_id, c.name\n" +
+                "FROM product p\n" +
+                "JOIN category c ON p.category_id = c.id\n" +
+                "WHERE p.id = ?;\n";
         Product p = null;
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -144,11 +149,41 @@ public class ProductService implements IProductService<Product> {
                 double price = resultSet.getDouble("price");
                 String description = resultSet.getString("description");
                 int category_id = resultSet.getInt("category_id");
-                return new Product(id, name, img, price, description, category_id);
+                String nameCategory = resultSet.getString("name");
+                Category category = new Category(category_id, nameCategory);
+                return new Product(id, name, img, price, description, category);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         return p;
+    }
+
+    public List<Product> findByName(String name, double price) {
+        List<Product> products = new ArrayList<>();
+        String sql = "select * from product where LOWER (name) like LOWER (?) or  price <=? ";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, "%" + name + "%");
+            preparedStatement.setDouble(2, price);
+            System.out.println(preparedStatement.toString());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Category category = new Category(resultSet.getInt("category_id"), resultSet.getString("name"));
+                Product product = new Product(
+                        resultSet.getInt("id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("img"),
+                        resultSet.getDouble("price"),
+                        resultSet.getString("description"),
+                        category
+                );
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(products);
+        return products;
     }
 }

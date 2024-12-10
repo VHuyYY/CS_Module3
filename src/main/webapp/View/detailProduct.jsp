@@ -1,11 +1,9 @@
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <%--
   Created by IntelliJ IDEA.
   User: bipro
-  Date: 3/12/2024
-  Time: 8:14 pm
+  Date: 8/12/2024
+  Time: 11:34 pm
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -19,6 +17,7 @@
     <title>Title</title>
 </head>
 <body>
+
 
 <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
@@ -50,15 +49,7 @@
                          width="40"/>
                 </a>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <c:if test="${sessionScope.account != null}">
-                        <span>
-                            Hello ${sessionScope.account.account}
-                        </span>
-                    </c:if>
-                    <c:if test="${sessionScope.account != null}">
-                        <a href="logout">Đăng Xuất</a>
-                    </c:if>
-                    <c:if test="${sessionScope.account == null}">
+                    <c:if test="${sessionScope.account =! null}">
 
                         <li class="nav-item">
                             <a class="nav-link" href="http://localhost:8080/user?path=login">
@@ -74,8 +65,8 @@
                             </i>
                             Giỏ Hàng
                             <span class="badge">
-         0
-        </span>
+                                ${sessionScope.totalQuantity}
+                            </span>
                         </a>
                     </li>
                 </ul>
@@ -128,9 +119,6 @@
 <br>
 <div class="title">
     <p>Danh Mục Sản Phẩm</p>
-    <a href="http://localhost:8080/home?path=create">
-        <button>Thêm Sản Phẩm Mới</button>
-    </a>
 </div>
 <div class="main">
     <div class="main-left">
@@ -140,7 +128,7 @@
                     <div class="list-group" id="list-tab" role="tablist">
                         <a class="list-group-item list-group-item-action ${tag == item.id ? "active":""}"
                            id=" list-home-list"
-                           href="${pageContext.request.contextPath}/home?path=category&id=${item.id}"
+                           href="${pageContext.request.contextPath}/user?path=category&id=${item.id}"
                            role="tab" aria-controls="list-home">${item.name}</a>
                     </div>
                 </c:forEach>
@@ -149,32 +137,19 @@
     </div>
     <div class="main-right">
         <div class="row">
-            <c:forEach items="${products}" var="product" varStatus="loop">
+            <form action="/user?path=detailProduct" method="get">
                 <div class="card " style="width: 15rem;  margin-left: 20px; margin-bottom: 20px">
                     <img src="${product.img}" class="card-img-top" alt="..." height="200px">
                     <div class="card-body">
                         <h5 class="card-title">${product.name}</h5>
                         <h6 class="card-title"> $ ${product.price}</h6>
                         <p class="card-text">${product.description}</p>
-                        <a href="http://localhost:8080/home?path=edit&id=${product.id}" class="btn btn-primary">Edit</a>
-                        <label for="delete-${loop.index}" class="btn btn-primary red">Xóa</label>
-                        <input type="checkbox" id="delete-${loop.index}" class="confirm-checkbox"/>
-                        <div class="confirm-modal">
-                            <div class="modal-content">
-                                <p>Bạn có chắc chắn muốn xóa?</p>
-                                <a href="http://localhost:8080/home?path=delete&id=${product.id}"
-                                   class="btn btn-danger">Xác nhận</a>
-                                <label for="delete-${loop.index}" class="btn btn-secondary">Hủy</label>
-                            </div>
-                        </div>
                     </div>
                 </div>
-
-            </c:forEach>
+            </form>
         </div>
     </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
         crossorigin="anonymous"></script>

@@ -1,6 +1,8 @@
 package controller;
 
 import entity.Category;
+import entity.Item;
+import entity.Order;
 import entity.Product;
 import service.ProductService;
 
@@ -10,7 +12,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "ProductController", value = "/home")
@@ -34,24 +38,31 @@ public class ProductController extends HttpServlet {
                 break;
             case "edit":
                 editProduct(req, resp);
-
+                break;
             case "create":
                 addProduct(req, resp);
                 break;
+
             default:
                 showHome(req, resp);
                 break;
         }
     }
 
+
+
+
     private void addProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<Category> categoryList = productService.getAllCategory();
+        req.setAttribute("categories", categoryList);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/View/create.jsp");
         dispatcher.forward(req, resp);
     }
 
 
-
     private void editProduct(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<Category> categoryList = productService.getAllCategory();
+        req.setAttribute("categories", categoryList);
         int id = Integer.parseInt(req.getParameter("id"));
         Product product = productService.findById(id);
         req.setAttribute("product", product);
@@ -120,7 +131,8 @@ public class ProductController extends HttpServlet {
         double price = Double.parseDouble(req.getParameter("price"));
         String description = req.getParameter("description");
         int categorysId = Integer.parseInt(req.getParameter("categoryMethod"));
-        Product product = new Product(name, img, price, description, categorysId);
+        Category category = new Category(categorysId);
+        Product product = new Product(name, img, price, description, category);
         productService.add(product);
         resp.sendRedirect("/home");
     }
@@ -134,7 +146,8 @@ public class ProductController extends HttpServlet {
         double price = Double.parseDouble(req.getParameter("price"));
         String description = req.getParameter("description");
         int categorysId = Integer.parseInt(req.getParameter("categoryMethod"));
-        Product product = new Product(id, name, img, price, description, categorysId);
+        Category category = new Category(categorysId);
+        Product product = new Product(id, name, img, price, description, category);
         productService.update(id, product);
         resp.sendRedirect("/home");
     }

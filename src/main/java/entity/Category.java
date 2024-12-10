@@ -29,4 +29,7 @@ public class Category {
         this.name = name;
     }
 
+    public Category(int id) {
+        this.id = id;
+    }
 }

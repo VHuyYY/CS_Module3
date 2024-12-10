@@ -1,3 +1,4 @@
+<%@ taglib prefix="e" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: bipro
@@ -58,8 +59,12 @@
             <li>
                 <p>Category</p>
                 <select class="form-select " name="categoryMethod" aria-label="Default select example">
-                    <option value="1"${product.categoryId == 1 ? 'selected' : ''}>Nhẫn</option>
-                    <option value="2"${product.categoryId == 2 ?'selected' : ''}>Dây Chuyền</option>
+                    <e:forEach items="${categories}" var="categoryId">
+                        <option value="${categoryId.id}"
+                        <e:if test="${categoryId.id == product.categoryId.id}"> selected </e:if> >
+                            ${categoryId.name}
+                        </option>
+                    </e:forEach>
                 </select>
             </li>
             <li>
